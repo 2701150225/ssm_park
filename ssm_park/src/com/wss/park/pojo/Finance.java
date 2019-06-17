@@ -11,6 +11,7 @@ public class Finance implements Serializable {
 	private String userName;
 	private Date oprTime;
 	private String remark;
+	
 	public int getFinanceId() {
 		return financeId;
 	}
