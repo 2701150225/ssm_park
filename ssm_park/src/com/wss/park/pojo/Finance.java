@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Finance implements Serializable {
-
 	private int financeId;
 	private String carNo;
 	private int financeType;
