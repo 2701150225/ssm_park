@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mybatis的dtd文件 -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace属性： 用于指定指向那个接口 -->
+<mapper namespace="com.wss.park.mapper.UserDAO">
+	<!-- 用户注册 -->
+	<insert id="reg" parameterType="user">
+		<![CDATA[
+			insert into users(userId,password,userName,mobile,status) values(#{userId},#{password},#{userName},#{mobile},#{status})
+		]]>
+	</insert>
+	<!-- 用户登录-->
+	<select id="login" parameterType="user" resultType="user">
+		<![CDATA[
+			select * from users where userId=#{userId} and password=#{password}
+		]]>
+	</select>
+	<!-- 按userId操作 -->
+	<select id="findById" parameterType="user" resultType="user">
+		<![CDATA[
+			select * from users where userId=#{userId}
+		]]>
+	</select>
+
+
+</mapper>

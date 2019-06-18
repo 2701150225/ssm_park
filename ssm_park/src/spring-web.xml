@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 配置新的HandlerMappin和HandlerAdapter -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	
+	<!-- 静态资源处理, js,gif,png....等静态资源不会进入到核心控制器 -->
+	<mvc:default-servlet-handler/>
+
+
+	<!-- 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	    <property name="prefix" value="/WEB-INF/jsp/"></property>
+	    <property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	
+	 
+	 <!-- 处理文件上传 -->
+	 <bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	     <property name="maxUploadSize" value="2097152"></property>
+	 </bean>
+	 
+    <!--4:扫描web所有的 controller-->
+    <context:component-scan base-package="com.wss.park.controller"/>
+
+ 
+</beans>
