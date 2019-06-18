@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
 <div class="login_b">
 	<div class="header"><!--<div class="header_logo"><img src="images/logo.png" width="140" height="47"></div> -->
-	<p class="header_con">车牌识别停车场管理系统</p>
+	<p class="header_con">世纪学府小区停车场车牌识别管理系统</p>
 </div>
 <div class="lgn_bx">
 	<div class="login_con">
@@ -63,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					  					<input type="text" name="randCode" id="randCode" placeholder="输入图形验证码" class="telbt" onfocus="clearvalue(this);" style="width:120px;">
 					  				</div>
 					  				<div class="rzm_btn">
-					  					<img src="${pageContext.request.contextPath }/enimg.jsp" width="70" height="42" id="codes" align="top" alt="点击换一张"  onclick="refresh();">
+					  					<img src="${pageContext.request.contextPath }/enimg.jsp" width="140" height="42" id="codes" align="top" alt="点击换一张"  onclick="refresh();">
 					  				</div>
 								</li>	      
 					            <li  style="border:none; background:none">

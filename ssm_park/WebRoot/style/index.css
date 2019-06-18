@@ -16,7 +16,7 @@ a{text-decoration:none !important;color:#3f3f3f;}
 .login_b{position:relative;}
 .lgn_bx {width:100%; height:450px; background:url(../images/banner.jpg) center no-repeat;}
 .login_con{width:1050px; height:450px;overflow:hidden; margin:0 auto; position:relative}
-.lgn_con{width:380px; height:380px; background:#FFF;  position:absolute; top:30px; right:20px; z-index:99 }
+.lgn_con{width:380px; height:370px; background:#009688;  position:absolute; top:40px; right:20px; z-index:99 }
 .login_con_bx{width:280px; height:350px; margin:10px auto;z-index:99}
 .login_con_bx_t{ width:100%; line-height:40px; height:40px; 
 }
@@ -31,7 +31,7 @@ a{text-decoration:none !important;color:#3f3f3f;}
 .lg_zhli{height:40px; line-height:40px; margin-top:10px;}
 
 .login_btn{ display:block;line-height:45px; background:#f39d36;  margin-top:25px; color:#FFF; text-align:center; font-size:18px; text-align:center; border:none; cursor:pointer}
-.login_tit{font-size:28px; text-align:center; line-height:40px; color:#3c8dbc; margin-top:15px; margin-bottom:5px; }
+.login_tit{font-size:28px; text-align:center; line-height:40px; color:#f39d36; margin-top:15px; margin-bottom:5px; }
 .telbt{ width:100%; height:34px; line-height:35px;border:1px solid #FFF; color:#999;} 
 .help_con{font-size:12px;  line-height:40px;}
 .help_con .sp1{color:#3c8dbc; cursor:pointer;float:left}
