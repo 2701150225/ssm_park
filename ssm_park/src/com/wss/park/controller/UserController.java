@@ -59,7 +59,7 @@ public class UserController {
 			return "login";
 		}
 		
-		return "success";
+		return "faceCheck";
 		
 	}
 
