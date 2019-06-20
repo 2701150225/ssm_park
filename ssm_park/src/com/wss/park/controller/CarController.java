@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -184,5 +185,16 @@ public class CarController {
 			return "car";
 		}
 	
+		@RequestMapping("/stopCar")
+
+		public String stopCar(Car car,Model model)
+		{
+			if(car==null) {
+				car=new Car();
+			}
+			List<Car> list = carService.findByCarNo(car);
+			model.addAttribute("carlist", list);
+			return "stop";
+		}
 	
 }

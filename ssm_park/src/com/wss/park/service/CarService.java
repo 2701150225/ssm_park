@@ -1,5 +1,7 @@
 package com.wss.park.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -28,5 +30,8 @@ public class CarService {
 	//按状态查找
 	public Car findByStatus(Car car){
 		return carDAO.findByStatus(car);
+	}
+	 public  List<Car> findByCarNo(Car car) {
+		return  carDAO.findByCarNo(car);
 	}
 }
