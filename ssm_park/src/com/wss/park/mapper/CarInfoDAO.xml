@@ -12,6 +12,13 @@
 		select carNo,userName,mobile,startDate,expireDate,DATEDIFF(expireDate,now()) AS DiffDate,remark from carinfo where carNo = #{carNo}
 	</select>
 	
-	
+	<!-- 查找所有车主-->
+	<select id="findAll" parameterType="String" resultType="carInfo">
+			select * from carinfo 
+		<if test="carNo !=null and carNo!=''">
+			where carNo=#{carNo}
+		</if>
+		order by carInfoId desc
+	</select>
 	
 </mapper>
