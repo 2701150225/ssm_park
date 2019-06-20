@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import com.wss.park.mapper.CarInfoDAO;
 import com.wss.park.pojo.CarInfo;
 
@@ -25,5 +24,15 @@ public class CarInfoService {
 	@Transactional
 	public CarInfo findCarbyCarId(String carNo) {
 		return carInfoDAO.findCarbyCarId(carNo);
+	}
+	
+	@Transactional
+	public void carAdd(CarInfo carInfo){
+		carInfoDAO.addCarInfo(carInfo);
+	}
+
+	@Transactional
+	public void carUpdate(CarInfo carInfo) {
+        carInfoDAO.UpdateCarInfo(carInfo);		
 	}
 }

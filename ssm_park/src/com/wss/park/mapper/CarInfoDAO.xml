@@ -6,19 +6,32 @@
 <!--namespace属性： 用于指定指向那个接口 -->
 <mapper namespace="com.wss.park.mapper.CarInfoDAO">
 
-	
+
 	<!-- 通过车牌找车 -->
 	<select id="findCarbyCarId" parameterType="String" resultType="carInfo">
-		select carNo,userName,mobile,startDate,expireDate,DATEDIFF(expireDate,now()) AS DiffDate,remark from carinfo where carNo = #{carNo}
+		select
+		carNo,userName,mobile,startDate,expireDate,DATEDIFF(expireDate,now())
+		AS DiffDate,remark from carinfo where carNo = #{carNo}
 	</select>
-	
-	<!-- 查找所有车主-->
+
+	<!-- 查找所有车主 -->
 	<select id="findAll" parameterType="String" resultType="carInfo">
-			select * from carinfo 
+		select * from carinfo
 		<if test="carNo !=null and carNo!=''">
 			where carNo=#{carNo}
 		</if>
 		order by carInfoId desc
 	</select>
-	
+
+	<!-- 新增包月车主用户 -->
+	<insert id="addCarInfo" parameterType="carInfo">
+		insert into carinfo(carNo,userName,mobile,startDate,expireDate,remark)
+		values(#{carNo},#{userName},#{mobile},#{startDate},#{expireDate},#{remark})
+	</insert>
+
+	<update id="updateCarInfo" parameterType="carInfo">
+		update carinfo set
+		carNo=#{carNo},userName=#{userName},mobile=#{mobile},startDate=#{startDate},expireDate=#{expireDate},remark=#{remark}
+		where carInfoId=#{carInfoId}
+	</update>
 </mapper>

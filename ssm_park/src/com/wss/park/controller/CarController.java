@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
@@ -157,4 +158,31 @@ public class CarController {
 		model.addAttribute("carInfoList", carInfoList);
 		return "car";
 	}
+	@RequestMapping(value="/carAdd",method=RequestMethod.GET)
+	public String carAdd(ModelMap model) throws Exception{
+		CarInfo carInfo = new CarInfo();
+		model.addAttribute("carInfo",carInfo);
+		return "carInfo";
+	}
+	//保存车辆信息
+		@RequestMapping(value="/carAdd",method=RequestMethod.POST)
+		public String carAdd(CarInfo carInfo,ModelMap model) {
+			try{
+				if(carInfo.getCarInfoId()==0){
+					carInfoService.carAdd(carInfo);
+				}else{
+					carInfoService.carUpdate(carInfo);
+				}
+			}catch(Exception e){
+				model.addAttribute("carInfo", carInfo);
+				model.addAttribute("msg", "该车牌对应的车辆信息已经存在");
+				return "carInfo";
+			}
+			//车辆信息
+			List<CarInfo> carInfoList = carInfoService.findCar("");
+			model.addAttribute("carInfoList", carInfoList);
+			return "car";
+		}
+	
+	
 }
