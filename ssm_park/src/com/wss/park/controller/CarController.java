@@ -1,10 +1,12 @@
 package com.wss.park.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServlet;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -15,23 +17,33 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.wss.park.car.FaceApi;
 import com.wss.park.car.RootResp;
+import com.wss.park.pojo.Car;
+import com.wss.park.pojo.CarInfo;
+import com.wss.park.pojo.Finance;
+import com.wss.park.pojo.SysSet;
 import com.wss.park.pojo.User;
+import com.wss.park.service.CarInfoService;
+import com.wss.park.service.CarService;
 import com.wss.park.utils.Base64Util;
 
 @Controller
 @RequestMapping("/car")
 public class CarController {
 
+	@Resource
+	private CarInfoService carInfoService;
+
+	@Resource
+	private CarService carService;
 	
 	@RequestMapping("/paizhao")
 	@ResponseBody
-	public Map<String,Object> paizhao(HttpServletRequest request,String imageData,String extName ) throws Exception{
+	public Map<String, Object> paizhao(HttpServletRequest request,String imageData,String extName) throws Exception{
 		User user = (User)request.getSession().getAttribute("userinfo");
 		FaceApi faceApi = new FaceApi();
 		RootResp resp = faceApi.getPlateOcr(imageData);
 		Map<String,Object> json = new HashMap<String, Object>();
-
-		
+	
 		if(resp!=null){
 			//ret=0表示识别成功
 			if(resp.getRet()==0) {
@@ -47,16 +59,90 @@ public class CarController {
 				savePath += inPic;
 				System.out.println("savePath="+savePath);
 				Base64Util.decoderBase64File(imageData, savePath);
-			    json.put("msg", carNo); 
-			}
-				else{
-					
-					json.put("msg", "车牌识别失败");
 				
+				//车辆信息
+				CarInfo carInfo = carInfoService.findCarbyCarId(carNo);
+
+				Car car = new Car();
+				car.setCardNo(carNo);
+				car.setStatus(0);
+				car.setUserName(user.getUserName());
+				//查未缴费的停车信息
+				Car c = carService.findByStatus(car);
+				String remark= "临时停车";
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				if(carInfo==null){//临时停车
+					car.setFinanceType(2);//2临时
+					if(c==null){//入库
+						car.setCarFee(0);
+						car.setInPic(inPic);
+						car.setInTime(sdf.format(new Date()));
+						car.setRemark(remark);
+						car.setStatus(0);//0未收费
+						carService.carIn(car);
+						json.put("msg","临时车【"+carNo+"】：入场" );
+					}else{//出库
+						float carFee = 0;
+						SysSet sysSet = (SysSet)request.getServletContext().getAttribute("sysSet");
+						carFee = c.getMinutes()-sysSet.getMianfeiTime();
+						if(carFee<=0){
+							car.setCarFee(0);
+							carFee=0;
+						}else{
+							carFee = (float)Math.ceil(carFee/sysSet.getShoufeiTime())*sysSet.getShoufeiMoney();
+							car.setCarFee(carFee);
+						}
+						car.setStatus(1);//1已收费
+						car.setOutPic(inPic);
+						car.setOutTime(sdf.format(new Date()));
+						car.setRemark(remark);
+						car.setCarId(c.getCarId());
+						carService.carOut(car);
+						if(carFee>0){
+							//收费
+							Finance finance = new Finance();
+							finance.setCarNo(carNo);
+							finance.setFinanceType(2);//临时车收费
+							finance.setOprTime(new Date());
+							finance.setUserName(user.getUserName());
+							finance.setRemark("临时车【"+carNo+"】：出场，请收费:"+carFee+"元" );
+							finance.setTotalMoney(carFee);
+					
+						}
+						json.put("msg","临时车【"+carNo+"】：出场，请收费:"+carFee+"元" );
+					}
+				}else{//包月停车
+					remark="包月停车";
+					car.setFinanceType(1);//1包月
+					if(c==null){//入库
+						car.setCarFee(0);
+						car.setInPic(inPic);
+						car.setInTime(sdf.format(new Date()));
+						car.setRemark(remark);
+						car.setStatus(0);//0未收费
+						carService.carIn(car);
+						json.put("msg","包月车【"+carNo+"】：入场" );
+					}else{//出库
+						car.setCarFee(0);
+						car.setStatus(2);//2包月
+						car.setOutPic(inPic);
+						car.setOutTime(sdf.format(new Date()));
+						car.setRemark(remark);
+						car.setCarId(c.getCarId());
+						carService.carOut(car);
+						if(carInfo.getDiffDate()>0){
+							json.put("msg","包月车【"+carNo+"】：出场，还剩"+carInfo.getDiffDate()+"天" );
+						}else{
+							json.put("msg","包月车【"+carNo+"】：出场，请及时缴费" );
+						}
+					}
+				}
+				
+			}else{
+				json.put("errorCode", resp.getRet());
+				json.put("msg", "车牌识别失败");
 			}
 		}
-			
-
 		return json;
-}
+	}
 }
